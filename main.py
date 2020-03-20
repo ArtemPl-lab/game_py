@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QWidget, QGridLayout,
     QPushButton, QApplication,QLabel)
 from PyQt5.QtGui import (QPixmap,QPicture)
 from PIL import Image
-import drawing_map
+#import drawing_map
 import QThread
 def crop(image_path, coords):
     image_obj = Image.open(image_path)
@@ -16,11 +16,14 @@ if __name__ == '__main__':
     w = QWidget()
     w.setWindowTitle('Game')
     w.setStyleSheet(open("style.qss", "r").read())
-    grid = QGridLayout()
-    w.setLayout(grid)
     w.showFullScreen()
     frame_sz = [w.frameSize().height()//16,w.frameSize().width()//16]
     img = crop('./sprite.jpg', (105, 14, 121, 30))
     image = QPixmap(img)
-    drawing_map.draw_map(grid, image)
+    grid = QThread.Actions(image)
+    w.setLayout(grid)
+    #grid.start_draw()
+    lb = QLabel()
+    lb.setText("hh")
+    grid.onCountChanged(lb)
     sys.exit(app.exec_())

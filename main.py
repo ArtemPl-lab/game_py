@@ -14,9 +14,9 @@ def crop(image_path, coords):
 def create_lb(i,j,block):
     label = QLabel()
     pic = QPixmap()
-    if block == 1:
+    if block == 3:
         pic = QPixmap('sprite.jpg__resize_sprite.png')
-    elif block == 0:
+    elif block == 0 or block == 1:
         pic =  QPixmap('sprite.jpg__resize_sprite2.png')
     label.setPixmap(pic)
     grid.addWidget(label,i,j)
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     w.setLayout(grid)
 
     m =  generate_map.generate_mass(frame_sz[0],frame_sz[1])
-
+    generate_map.generate_lab(m)
     thread, thread2, thread3 = Game_Thread.Draw_map_thread(), Game_Thread.Draw_map_thread(), Game_Thread.Draw_map_thread()
     thread.output[int, int,int].connect(create_lb)
     thread2.output[int, int,int].connect(create_lb)

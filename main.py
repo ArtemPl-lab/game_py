@@ -1,7 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import *
 from PIL import Image
 import Game_Thread
 import generate_map
@@ -27,24 +26,24 @@ if __name__ == "__main__":
     w.setWindowTitle('Game')
     w.setStyleSheet(open("style.qss", "r").read())
     w.showFullScreen()
-    frame_sz = [w.frameSize().height()//16,w.frameSize().width()//16]
-    img = crop('./sprite.jpg', (1081, 70, 1097, 86))
-    image = QPixmap(img)
+    h = w.frameSize().height()//16
+    wh = w.frameSize().width()//16
+    #img = crop('./sprite.jpg', (1081, 70, 1097, 86))
+    #image = QPixmap(img)
     grid = QGridLayout()
     grid.setSpacing(0)
     grid.setContentsMargins(0, 0, 0, 0)
     w.setLayout(grid)
 
-    m =  generate_map.generate_mass(frame_sz[0],frame_sz[1])
-    generate_map.generate_lab(m)
+    map_ =  generate_map.generate_mass(h,wh)
+    generate_map.generate_lab(map_)
+
     thread, thread2, thread3 = Game_Thread.Draw_map_thread(), Game_Thread.Draw_map_thread(), Game_Thread.Draw_map_thread()
     thread.output[int, int,int].connect(create_lb)
     thread2.output[int, int,int].connect(create_lb)
     thread3.output[int, int,int].connect(create_lb)
-    thread.render(0, 0, frame_sz[0] + 1, 3,m)
-    thread2.render(0, 3, frame_sz[0] + 1, frame_sz[1]//2,m)
-    thread3.render(0, frame_sz[1]//2, frame_sz[0] + 1, frame_sz[1] + 1,m)
-
-
+    thread.render(0, 0, h+1, 3,map_)
+    thread2.render(0, 3, h+1, wh//2,map_)
+    thread3.render(0, wh//2, h+1, wh + 1,map_)
 
     sys.exit(app.exec_())

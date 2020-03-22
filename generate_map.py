@@ -22,24 +22,13 @@ def generate_lab(mass):
             ran = random.randint(0, len(neighbours)-1)
             stack.append(current)
             neighbourCell = neighbours[ran]
-            neighbours.pop(ran)
-            if len(neighbours) != 0:
-                for i in neighbours:
-                    stack2.append(i)
             mass = remove_wall(current,neighbourCell,mass)
             current = neighbourCell
             mass[current[1]][current[0]] = 3
             i = 0
         elif (len(stack)>0):
             stack.pop()
-            i = 0
-        else:
-            if i > 40:
-                break
-            else:
-                ran = random.randint(0, len(stack2)-1)
-                current = stack2[ran]
-                i+=1
+            current = stack[len(stack)-1]
         unvisitedCount = get_unvisted_cells(mass)
 
 def get_neighbours(mas,current_pos):

@@ -21,6 +21,11 @@ def generate_lab(mass):
         if(len(neighbours) != 0):
             ran = random.randint(0, len(neighbours)-1)
             stack.append(current)
+            if len(stack2) != 0:
+                if stack2.count(current) == 0:
+                    stack2.append(current)
+            else:
+                stack2.append(current)
             neighbourCell = neighbours[ran]
             mass = remove_wall(current,neighbourCell,mass)
             current = neighbourCell
@@ -30,6 +35,7 @@ def generate_lab(mass):
             stack.pop()
             current = stack[len(stack)-1]
         unvisitedCount = get_unvisted_cells(mass)
+    return stack2
 
 def get_neighbours(mas,current_pos):
     width = len(mas[0])
@@ -75,6 +81,7 @@ if __name__=="__main__":
     m = generate_mass(100,100)
     for i in m:
         print(*i)
-    generate_lab(m)
+    l = generate_lab(m)
     for i in m:
         print(*i)
+    print(len(l))

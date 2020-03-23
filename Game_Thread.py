@@ -22,4 +22,4 @@ class Draw_map_thread(QThread):
                     self.output.emit(i,j,self.map[i][j])
                 else:
                     self.output.emit(i,j,0)
-                time.sleep(0.004)
+                time.sleep(0.003)

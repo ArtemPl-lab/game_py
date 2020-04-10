@@ -32,6 +32,7 @@ class Game_widget(QWidget):
         else:
             print(key)
 def create_lb(i,j,block):
+    global value
     label = QLabel()
     pic = QPixmap()
     if block == 3:
@@ -39,10 +40,15 @@ def create_lb(i,j,block):
     elif block == 0 or block == 1:
         pic =  QPixmap('sprite.jpg__resize_sprite2.png')
     label.setPixmap(pic)
-    grid.addWidget(label,i,j)
+    grid.addWidget(label, i, j)
+    value += 1
+    val = value // (wh*h // 100)
+    p.setValue(val)
+
+
 def playing():
     tl = QPixmap('portal.png')
-    for i in range(20):
+    for i in range(5):
         tp_start = random.randint(0, len(pl_pos_mass) - 1)
         tp_end = random.randint(0, len(pl_pos_mass) - 1)
         tp_start_pos = pl_pos_mass[tp_start]
@@ -63,13 +69,26 @@ def draw_map(map1):
     thread2.render(0, 3, h+1, wh//2,map1)
     thread3.render(0, wh//2, h+1, wh + 1,map1)
     thread3.finished.connect(playing)
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    global value
+    value = 0
     app = QApplication(sys.argv)
     w = Game_widget()
     w.setWindowTitle('Game')
     w.setStyleSheet(open("style.qss", "r").read())
     w.showFullScreen()
+
+    w2 = QWidget()
+    w2.setWindowTitle('Game load')
+    p = QProgressBar()
+    p.setGeometry(30, 40, 200, 25)
+    p.setValue(0)
+    grid1 = QGridLayout()
+    grid1.addWidget(p)
+    w2.setLayout(grid1)
+    w2.show()
+
     h = w.frameSize().height()//16
     wh = w.frameSize().width()//16
     #img = crop('./sprite.jpg', (1081, 70, 1097, 86))
@@ -79,7 +98,7 @@ if __name__ == "__main__":
     grid.setContentsMargins(0, 0, 0, 0)
     w.setLayout(grid)
 
-    map_ =  generate_map.generate_mass(h,wh)
+    map_ = generate_map.generate_mass(h,wh)
     pl_pos_mass = generate_map.generate_lab(map_)
 
     ran = random.randint(0, (len(pl_pos_mass) - 1)//2)
@@ -87,9 +106,7 @@ if __name__ == "__main__":
     ran2 = random.randint((len(pl_pos_mass) - 1)//2, len(pl_pos_mass) - 1)
     finish_pos_pl = pl_pos_mass[ran2]
     pc = QPixmap('player.png')
-    player1 = player.player(grid,map_,start_pos_pl,finish_pos_pl,pc)
+    player1 = player.player(grid, map_, start_pos_pl, finish_pos_pl, pc)
     tp = []
     draw_map(map_)
-
-
     sys.exit(app.exec_())
